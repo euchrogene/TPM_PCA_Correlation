@@ -46,25 +46,6 @@ TPM_PCA_Correlation_v.1.0
 sudo EG_tools uninstall -t TPM_PCA_Correlation_v.1.0 -i managene7/tpm-pca-correlation:v1.0
 ```
 
-Docker image: `managene7/tpm-pca-correlation:v1.0`
-
-The pipeline runs on provisioned EuchroGene hosts only, and the image runs only for this wrapper. A machine that is not provisioned is refused at startup, and the image refuses any run that did not come from the wrapper. Build the image with the site signing key rather than the default in the Dockerfile, and keep it in step with `SIGNING_KEY` in the wrapper:
-
-```bash
-docker build --build-arg EG_SIGNING_KEY="$(cat eg_signing.key)" \
-    -t managene7/tpm-pca-correlation:v1.0 .
-```
-
-The wrapper ships as a single-file executable rather than as source. Freeze it from the spec in this repository, which produces `dist/TPM_PCA_Correlation_v.1.0`, the name EG_tools puts on PATH:
-
-```bash
-pyinstaller --clean --noconfirm TPM_PCA_Correlation.spec
-```
-
-Build the wrapper and the image from the same commit. The signing key lives in both, and a wrapper frozen before a key rotation will have every one of its runs refused by the new image.
-
----
-
 ## Quick Start
 
 ```bash
