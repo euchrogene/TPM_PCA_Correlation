@@ -151,6 +151,7 @@ Use `figures/PCA_correlation_combined.pdf` for the manuscript and `tables/sample
 | `-ellipse` / `-connect` | `false` / `false` | 95 percent confidence ellipse per group, and thin lines joining the replicates of a group. |
 | `-pc_x` / `-pc_y` | `1` / `2` | Which components the PCA panel shows. |
 | `-formats` / `-dpi` / `-width` | `pdf,png,svg` / `600` / `89` | Figure formats, raster resolution, and panel width in mm (89 is one journal column, 183 is two). |
+| `-pull` | `auto` | When to fetch the image. `auto` pulls it the first time it is needed and reuses the local copy afterwards, `always` pulls before every run so a rebuild published under the same tag is picked up, `never` keeps the wrapper off the network and treats a missing image as an error. |
 | `-cores` / `-memory` | `8` / `64g` | Resources handed to the container. The ceilings are 100 cores and 500g. |
 
 ---
@@ -166,6 +167,7 @@ Use `figures/PCA_correlation_combined.pdf` for the manuscript and `tables/sample
 - Sample labels in the ordination are placed by a deterministic collision solver, so rerunning the same command reproduces the same figure. `-label_repel adjusttext` switches to the adjustText package that ships in the image, `-label_repel none` puts every label exactly on its point.
 - The heatmap ramp follows the data rather than a fixed default. All-positive matrices get the sequential ramp, where the low end is a pale cream rather than pure white so a low cell never reads as an empty cell. A matrix holding negative correlations gets the diverging ramp on a scale symmetric about zero, so cream falls exactly on r = 0 and the sign change is visible. Negatives are normal under `-scale true`, where gene-wise centring fixes the mean off-diagonal correlation at -1/(n - 1).
 - Numbers printed in the cells switch between near-black and white according to the WCAG relative luminance of the cell behind them, so they stay legible from the cream end to the black end of the ramp.
+- The image is fetched on demand, so a machine that has just installed the pipeline works without any extra step. On an air-gapped machine, load the image from a tar with `docker load` and run with `-pull never`.
 - PDF and SVG output keeps text as editable TrueType (`fonttype 42`) and draws the heatmap as vector cells rather than an embedded raster, so every panel can be restyled in Illustrator or Inkscape without re-running the pipeline.
 - The image ships Liberation Sans, which carries the metrics of Arial. `-font` accepts any face installed in the image, and falls back to the first installed sans-serif when the requested one is absent.
 
